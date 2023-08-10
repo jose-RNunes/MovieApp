@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="unexpected_error">Houve um erro inesperado.</string>
+    <string name="network_error">Houve um erro de conexão.</string>
+</resources>
