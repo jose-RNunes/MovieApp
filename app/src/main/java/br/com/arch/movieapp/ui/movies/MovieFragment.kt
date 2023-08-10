@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import br.com.arch.movieapp.databinding.FragmentMoviesBinding
 import br.com.arch.movieapp.ui.MainActivity
 import br.com.arch.movieapp.ui.detail.MovieDetailFragment
@@ -51,6 +53,22 @@ class MovieFragment : Fragment() {
 
     private fun bindViews() = binding?.run {
         rvMovies.adapter = movieAdapter
+
+        movieAdapter.addLoadStateListener { state ->
+             when(state.refresh) {
+                is LoadState.Loading -> {
+                    progress.isVisible = true
+                }
+                is LoadState.Error -> {
+                    progress.isVisible = false
+                    tvError.isVisible = true
+                    tvError.text = (state.refresh as LoadState.Error).error.message
+                }
+                is LoadState.NotLoading -> {
+                    progress.isVisible = false
+                }
+             }
+        }
     }
 
     private fun setupObservers() {
